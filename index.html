@@ -309,7 +309,7 @@ const CONFIG = {
   DRIVE_DOWNLOAD_BASE: "https://drive.google.com/uc?export=download&id=", 
   DRIVE_PREVIEW_BASE: "https://drive.google.com/file/d/", 
 
-  FALLBACK_TEXT: "No encontré archivos indexados para esa máquina. Asegúrate de que el código de máquina exista en la hoja de Google Sheets y que los datos sean correctos.",
+  FALLBACK_TEXT: "No encontré archivos indexados para esa solicitud. Asegúrate de que el nombre del archivo este en la lista.",
   
   SUPPORTED_EXTENSIONS: ['.txt', '.mp4', '.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png']
 };
@@ -355,14 +355,14 @@ async function sendMessage() {
     const machine = detectMachineFromText(text);
     
     if (!machine) {
-        showMessage('No identifiqué un código de máquina válido. Escriba el código exacto, por favor (ej: 1001).', 'bot');
+        showMessage('No identifiqué el nombre del archivo. Escriba el nombre correcto.', 'bot');
         $input.focus(); 
         return;
     }
     
     const cleanMachine = machine.trim().toUpperCase().replace(/[-_ ]/g, '');
 
-    showMessage(`🔍 Buscando opciones para la máquina ${cleanMachine}...`, 'bot');
+    showMessage(`🔍 Buscando opciones de archivos ${cleanMachine}...`, 'bot');
     
     // ** USAMOS EL ÍNDICE DE GOOGLE SHEETS **
     const files = getFilesForMachine(cleanMachine); 
@@ -432,13 +432,13 @@ function clearChat() {
     // 2. Muestra el mensaje de bienvenida
     const initialMessage = el('div', 'message bot');
     const p = el('p');
-    p.innerHTML = 'Hola, soy el Asistente de Mantenimiento. Por favor, ingresa el código de Máquina o la descripción del problema (ej: "Máquina: F-010, fallo de lubricación").';
+    p.innerHTML = 'Hola, soy el Asistente del area remanufactura. Por favor, seleccione el tema que desea visualizar).';
     initialMessage.appendChild(p);
     $messages.appendChild(initialMessage);
 
     // 3. Vuelve a mostrar la pista de máquinas si ya se cargó el índice
     if (state.machines.length > 0) {
-        showMessage(`✅ Índice de ${state.machines.length} máquinas cargado correctamente.`, 'bot');
+        showMessage(`✅ Índice de ${state.machines.length} Achivos cargados correctamente.`, 'bot');
     }
 
     $input.focus();
@@ -533,7 +533,7 @@ function showMediaPreview(url, filename, ext) {
                        <strong>Vista Previa: ${filename}</strong><br>`;
 
     if (ext === 'mp4') {
-        mediaHtml += `<p>El video de la máquina se abrirá en una nueva pestaña. Por favor, revisa tus ventanas.</p>`;
+        mediaHtml += `<p>El video del archivo se abrirá en una nueva pestaña. Por favor, revisa tus ventanas.</p>`;
         window.open(url, '_blank'); // Abrir el video directamente
     } else if (['jpg', 'jpeg', 'png'].includes(ext)) {
         mediaHtml += `<p>La imagen se abrió en una nueva pestaña. Por favor, revisa tus ventanas.</p>`;
@@ -587,17 +587,17 @@ async function loadMachines() {
     const hintText = state.machines.slice(0, 6).join(", ") + (state.machines.length > 6 ? ", etc." : "");
 
     // *** MODIFICACIÓN CLAVE AQUÍ ***
-    showMessage(`✅ ${state.machines.length} Máquinas cargadas`, 'bot');
+    showMessage(`✅ ${state.machines.length} Archivos cargadas`, 'bot');
     
     if (state.machines.length > 0) {
-        showMessage(`Códigos disponibles: **${hintText}**`, 'bot');
+        showMessage(`Archivos disponibles: **${hintText}**`, 'bot');
     }
     // *** FIN MODIFICACIÓN ***
 
     $input.focus(); 
   } catch (e) {
     console.warn("Error cargando lista de máquinas:", e);
-    showMessage("❌ **ERROR CRÍTICO:** No se pudo cargar la lista de máquinas desde Google Sheets. Revisa la consola y los permisos del archivo.", 'bot');
+    showMessage("❌ **ERROR CRÍTICO:** No se pudo cargar la lista de archivos", 'bot');
   }
 }
 
@@ -636,6 +636,7 @@ window.addEventListener('load', loadMachines);
 </body>
 
 </html>
+
 
 
 
