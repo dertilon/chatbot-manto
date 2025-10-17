@@ -3,640 +3,395 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot de Mantenimiento Industrial🛠️</title>
+    <title>Documentación Técnica: Seleccionar Máquina ⚙️</title>
 </head>
 <style>
-/* Paleta Industrial: Negro, Gris Oscuro, Naranja/Amarillo de advertencia */
-:root {
-    --color-bg-main: #1c1c1c; /* Fondo Oscuro */
-    --color-bg-chat: #2b2b2b; /* Fondo Chat */
-    --color-accent: #ff9900; /* Naranja/Amarillo, color de advertencia/foco */
-    --color-text-light: #e0e0e0; /* Texto Claro */
-    --color-metal-border: #444; /* Borde Metálico */
-    --color-bot-bg: #3c3c3c; /* Fondo Bot */
-    --color-user-bg: #1f4f6c; /* Fondo Usuario (Azul de planos o seguridad) */
-}
+    /* Paleta Industrial: Negro, Gris Oscuro, Naranja/Amarillo de advertencia */
+    :root {
+        --color-bg-main: #1c1c1c; /* Fondo Oscuro */
+        --color-bg-chat: #2b2b2b; /* Fondo Contenido */
+        --color-accent: #ff9900; /* Naranja/Amarillo, color de advertencia/foco */
+        --color-text-light: #e0e0e0; /* Texto Claro */
+        --color-metal-border: #444; /* Borde Metálico */
+        --color-bot-bg: #3c3c3c; /* Fondo Bot */
+        --color-link: #4CAF50; /* Color para los links (Verde de "OK") */
+    }
 
-/* Estilo de la página */
-body {
-    font-family: 'Monospace', 'Courier New', monospace; /* Fuente de Terminal/CLI */
-    background-color: #0d0d0d;
-    color: var(--color-text-light);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    /* Efecto sutil de ruido o textura metálica */
-    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), 
-                      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 20px 20px;
-}
+    /* Estilo de la página */
+    body {
+        font-family: 'Monospace', 'Courier New', monospace; /* Fuente de Terminal/CLI */
+        background-color: #0d0d0d;
+        color: var(--color-text-light);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; 
+        min-height: 100vh;
+        padding: 40px 20px;
+        margin: 0;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), 
+                          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 20px 20px;
+    }
 
-/* Contenedor principal del Chatbot (simulando un terminal o panel) */
-.chatbot-container {
-    width: 100%;
-    max-width: 450px;
-    height: 80vh;
-    min-height: 500px;
-    background-color: var(--color-bg-main);
-    border: 3px solid var(--color-metal-border);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 5px var(--color-accent); /* Sombra con toque de acento */
-    display: flex;
-    flex-direction: column;
-    border-radius: 5px;
-    overflow: hidden;
-}
+    /* Contenedor principal de la Lista de Documentos */
+    .chatbot-container {
+        width: 100%;
+        max-width: 600px; /* Más ancho para la lista */
+        background-color: var(--color-bg-main);
+        border: 3px solid var(--color-metal-border);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 5px var(--color-accent);
+        display: flex;
+        flex-direction: column;
+        border-radius: 5px;
+        overflow: hidden;
+    }
 
-/* Encabezado */
-.chatbot-header {
-    background-color: var(--color-metal-border);
-    color: var(--color-text-light);
-    padding: 15px;
-    text-align: center;
-    border-bottom: 2px solid var(--color-accent);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-}
+    /* Encabezado */
+    .chatbot-header {
+        background-color: var(--color-metal-border);
+        color: var(--color-text-light);
+        padding: 15px;
+        text-align: center;
+        border-bottom: 2px solid var(--color-accent);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
 
-.chatbot-header h1 {
-    margin: 5px 0 0;
-    font-size: 1.2em;
-    color: var(--color-accent);
-}
+    .chatbot-header h1 {
+        margin: 5px 0 0;
+        font-size: 1.4em;
+        color: var(--color-accent);
+    }
 
-.chatbot-header p {
-    margin: 0;
-    font-size: 0.8em;
-    color: var(--color-text-light);
-}
+    .chatbot-header p {
+        margin: 0;
+        font-size: 0.9em;
+        color: var(--color-text-light);
+    }
+    
+    /* Ventana de Contenido */
+    #document-list-container {
+        flex-grow: 1;
+        padding: 15px;
+        background-color: var(--color-bg-chat);
+        min-height: 400px;
+        overflow-y: auto; /* Habilitar scroll */
+        scrollbar-color: var(--color-accent) var(--color-bg-chat);
+        scrollbar-width: thin;
+    }
+    
+    /* ******************************************* */
+    /* ESTILOS DE LISTA MODIFICADOS (REQUISITOS)   */
+    /* ******************************************* */
 
-.chatbot-header i {
-    font-size: 1.5em;
-    margin-right: 10px;
-    color: var(--color-accent);
-}
+    /* Contenedor general de la lista */
+    #content-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px; /* Espacio entre elementos */
+    }
 
-/* Ventana de chat */
-.chat-window {
-    flex-grow: 1;
-    padding: 15px;
-    overflow-y: auto;
-    background-color: var(--color-bg-chat);
-    border-bottom: 1px dashed var(--color-metal-border);
-    /* Estilo de barra de desplazamiento (para navegadores compatibles) */
-    scrollbar-color: var(--color-accent) var(--color-bg-chat);
-    scrollbar-width: thin;
-}
+    /* Cada elemento de la lista (Máquina o Archivo) */
+    .list-item {
+        background-color: var(--color-bot-bg);
+        border: 1px solid var(--color-metal-border);
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer; /* Cursor para indicar que es clickeable */
+        transition: background-color 0.2s, box-shadow 0.2s;
+    }
+    
+    /* Estilo específico para los códigos de máquina (más prominente) */
+    .machine-item {
+        border-left: 5px solid var(--color-accent);
+        font-weight: bold;
+        color: var(--color-text-light);
+    }
 
-/* Mensajes */
-.message {
-    padding: 10px 15px;
-    border-radius: 3px;
-    margin-bottom: 10px;
-    max-width: 80%;
-    line-height: 1.4;
-    font-size: 0.9em;
-}
+    .list-item:hover {
+        background-color: #3c3c3c;
+        box-shadow: 0 0 8px rgba(255, 153, 0, 0.3);
+    }
+    
+    /* Estilo para los links de Archivo */
+    .file-link {
+        text-decoration: none;
+        color: var(--color-link); /* Verde/Éxito para el link */
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1em;
+    }
+    
+    .file-link .file-ext {
+        font-size: 0.75em;
+        color: var(--color-text-light);
+        background-color: #555;
+        padding: 3px 6px;
+        border-radius: 3px;
+    }
 
-.message p {
-    margin: 0;
-    white-space: pre-wrap; /* Respeta los saltos de línea en las respuestas */
-}
+    /* ******************************************* */
+    /* Botón Volver (Sustituye al de Borrado)      */
+    /* ******************************************* */
+    
+    /* Contenedor de acciones (Botón de borrado) */
+    .input-container {
+        display: flex;
+        justify-content: flex-start; /* Alinea el botón a la izquierda */
+        padding: 10px 15px;
+        border-top: 1px solid var(--color-metal-border);
+        background-color: var(--color-bg-main);
+    }
+    
+    /* Estilo para el botón Volver */
+    #back-btn {
+        background-color: #555; /* Gris para "volver" */
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 1em;
+        border-radius: 3px;
+        transition: background-color 0.2s;
+        /* Inicialmente oculto */
+        display: none; 
+    }
 
-/* Mensaje del Bot */
-.message.bot {
-    background-color: var(--color-bot-bg);
-    color: var(--color-text-light);
-    border-left: 3px solid var(--color-accent);
-    margin-right: auto;
-}
-
-/* Mensaje del Usuario */
-.message.user {
-    background-color: var(--color-user-bg);
-    color: #fff;
-    border-right: 3px solid var(--color-accent);
-    margin-left: auto;
-    text-align: right;
-}
-
-/* Contenedor de entrada (Input) */
-.input-container {
-    display: flex;
-    padding: 15px;
-    border-top: 1px solid var(--color-metal-border);
-    background-color: var(--color-bg-main);
-}
-
-#user-input {
-    flex-grow: 1;
-    padding: 10px;
-    border: 1px solid var(--color-metal-border);
-    background-color: #0f0f0f;
-    color: var(--color-text-light);
-    font-size: 1em;
-    font-family: inherit;
-    border-radius: 3px 0 0 3px;
-    transition: border-color 0.3s;
-}
-
-#user-input:focus {
-    outline: none;
-    border-color: var(--color-accent);
-    box-shadow: 0 0 5px var(--color-accent);
-}
-
-/* Botón de envío */
-#send-btn {
-    background-color: var(--color-accent);
-    color: var(--color-bg-main);
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 1em;
-    border-radius: 0 3px 3px 0;
-    transition: background-color 0.2s, opacity 0.2s;
-}
-
-#send-btn:hover {
-    background-color: #cc7700;
-}
-
-#send-btn:active {
-    opacity: 0.8;
-}
-/* --- Estilos para la lista de archivos de Drive (Opciones) --- */
-
-.file-option-group {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 10px;
-    border-radius: 4px;
-    margin-top: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    border-left: 2px solid #555;
-}
-
-.file-title {
-    font-weight: bold;
-    color: var(--color-accent);
-    flex-basis: 150px; /* Ancho base para el título */
-}
-
-.option-btn {
-    background: var(--color-accent);
-    color: var(--color-bg-main);
-    border: none;
-    padding: 6px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 0.8em;
-    text-decoration: none; 
-    transition: background 0.2s;
-}
-
-.option-btn:hover {
-    background: #cc7700;
-}
-
-.download-btn {
-    background: #555;
-    color: var(--color-text-light);
-}
-
-.download-btn:hover {
-    background: #777;
-}
-
-.media-preview-box {
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px dashed var(--color-accent);
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-}
-/* Nuevo contenedor para mejorar el layout de la lista de opciones */
-.options-list {
-  display: flex;
-  flex-direction: column; 
-  gap: 10px; /* Espacio entre los grupos de archivos */
-  margin-top: 5px;
-}
-
-/* Estilo para el título de la lista de opciones (Ej: "Respuestas para 1001:") */
-.option-title-list {
-    font-weight: bold;
-    margin-bottom: 5px;
-    padding-bottom: 5px;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-}
-/* style.css (Añadir al final) */
-
-/* Ajuste general del input-container para el nuevo botón */
-.input-container {
-    display: flex;
-    padding: 15px;
-    border-top: 1px solid var(--color-metal-border);
-    background-color: var(--color-bg-main);
-    /* Asegura que los botones y el input compartan espacio */
-}
-
-
-/* Estilo para el botón de Limpiar */
-#clear-btn {
-    background-color: var(--color-bot-bg); /* Un gris oscuro */
-    color: var(--color-text-light);
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 1em;
-    border-radius: 0; /* Sin borde inicial */
-    margin-right: 5px; /* Pequeña separación con el botón de enviar */
-    transition: background-color 0.2s, opacity 0.2s;
-    border-radius: 3px 0 0 3px; /* Borde al inicio de la fila de botones */
-}
-
-#clear-btn:hover {
-    background-color: #555; /* Un gris más claro al pasar el ratón */
-}
-
-/* Ajuste al botón de Enviar para que no tenga borde a la izquierda */
-#send-btn {
-    /* ... reglas existentes ... */
-    border-radius: 0 3px 3px 0; /* Asegura el borde redondeado solo a la derecha */
-    margin-left: 0; /* Elimina cualquier margen sobrante */
-}
-
-/* Ajuste al input para que tenga margen a la derecha con el nuevo botón */
-#user-input {
-    /* ... reglas existentes ... */
-    border-radius: 3px 0 0 3px; /* El input tiene el borde redondeado a la izquierda */
-    margin-right: 0; /* El botón de limpiar va pegado al input */
-}
+    #back-btn:hover {
+        background-color: #777;
+    }
+    
+    .initial-message {
+        color: var(--color-accent);
+        margin-bottom: 20px;
+        padding-bottom: 5px;
+        border-bottom: 1px dashed var(--color-metal-border);
+        font-size: 1.1em;
+    }
 </style>
 <body>
     <div class="chatbot-container">
         <header class="chatbot-header">
-            <i class="fas fa-robot"></i>
-            <h1>CHATBOT MANTENIMIENTO REMANUFACTURA V1.0</h1>
-            <p>informacion técnica y seguridad</p>
+            <i class="fas fa-file-alt"></i>
+            <h1>ÍNDICE DE DOCUMENTACIÓN TÉCNICA REMANUFACTURA</h1>
+            <p>Selecciona un índice para ver los archivos disponibles.</p>
         </header>
-        <div id="chat-window" class="chat-window">
-            <div class="message bot">
-                <p>seleccione tema o máquina</p>
-            </div>
-        </div>
+
         <div class="input-container">
-            <input type="text" id="user-input" placeholder="Escribe tu consulta aquí..." onkeypress="handleKeyPress(event)">
-            <button id="clear-btn" onclick="clearChat()">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-            <button id="send-btn" onclick="sendMessage()">
-                <i class="fas fa-paper-plane"></i>
+            <button id="back-btn" onclick="renderMachineList()">
+                <i class="fas fa-arrow-left"></i> Volver a la Lista de índices
             </button>
         </div>
+
+        <div id="document-list-container">
+            </div>
+
     </div>
     
     <script>
-const CONFIG = {
-  // ** URL DE EXPORTACIÓN CSV CORRECTA **
-  // (Debes asegurar que el GID de la hoja con el índice consolidado sea 59144972)
-  SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyjYPpbqPVD_0C4A9sfKghjJVyHcRi7GMzizMXe0uxbEZ4ITVnetb9wjdGsQN1CsoHdua1OPmsUVIr/pub?gid=0&single=true&output=csv",
-  
-  // ** URLs DE GOOGLE DRIVE **
-  DRIVE_DOWNLOAD_BASE: "https://drive.google.com/uc?export=download&id=", 
-  DRIVE_PREVIEW_BASE: "https://drive.google.com/file/d/", 
+        const CONFIG = {
+            // ** URL DE EXPORTACIÓN CSV (Tu URL) **
+            SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyjYPpbqPVD_0C4A9sfKghjJVyHcRi7GMzizMXe0uxbEZ4ITVnetb9wjdGsQN1CsoHdua1OPmsUVIr/pub?gid=0&single=true&output=csv",
+            // ** URLs DE GOOGLE DRIVE **
+            DRIVE_PREVIEW_BASE: "https://drive.google.com/file/d/",
+        };
 
-  FALLBACK_TEXT: "No encontré archivos indexados para esa solicitud. Asegúrate de que el nombre del archivo este en la lista.",
-  
-  SUPPORTED_EXTENSIONS: ['.txt', '.mp4', '.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png']
-};
+        const state = { 
+            // Lista de códigos de máquina. Guarda el original y el limpio.
+            // Ej: [{ clean: 'MAQ100', original: 'MAQ-100' }, ...]
+            machines: [], 
+            // Índice de archivos: { 'MAQ100': [{name: 'Guia.pdf', id: 'drive_id_1', ext: 'pdf'}, ... ] }
+            files: {} 
+        };
 
-const state = { 
-    machines: [], // Lista de códigos de máquina
-    files: {}     // { '1001': [{name: 'Guia.pdf', id: 'drive_id_1', ext: 'pdf'}, ... ] }
-};
+        const $listContainer = document.getElementById('document-list-container');
+        const $backButton = document.getElementById('back-btn');
+        
 
-// Asegúrate de que los IDs en index.html apunten a los elementos correctos
-const $messages = document.getElementById('chat-window'); // Corregido ID de index.html
-const $input = document.getElementById('user-input');      // Corregido ID de index.html
-const $chatForm = document.querySelector('.input-container'); // Usamos el contenedor o el botón para el evento (ver nota abajo)
-const $sendBtn = document.getElementById('send-btn');
+        // --- FUNCIONES DE LÓGICA DE ARCHIVOS ---
 
+        /**
+         * Carga el índice de máquinas y archivos desde Google Sheets.
+         */
+        async function loadData() {
+            $listContainer.innerHTML = '<div class="initial-message">Cargando índice de archivos... <i class="fas fa-spinner fa-spin"></i></div>';
+            
+            try {
+                const res = await fetch(CONFIG.SHEET_CSV_URL);
+                if (!res.ok) throw new Error("No se pudo cargar la hoja. Código: " + res.status);
+                const csv = await res.text();
+                
+                state.machines = [];
+                state.files = {};
 
-// NOTA: Tu index.html no tiene un <form id="chatForm">, sino un <div class="input-container"> y un onclick="sendMessage()"
-// Debemos adaptar la lógica de envío de datos del script anterior a los IDs de tu index.html:
+                const rows = csv.trim().split("\n").map(r => r.split(",").map(c => c.trim()));
+                const header = rows.shift().map(h => h.toLowerCase());
+                
+                // Busca la columna de código de máquina/título
+                const machineCol = header.findIndex(h => /maquina|codigo|machine|code/.test(h));
+                
+                if(machineCol === -1) {
+                    throw new Error("No se encontró la columna de código de máquina en el encabezado del CSV.");
+                }
 
-// 1. Usar la función de envío de index.html si existe, o reescribir la lógica de evento.
-// Como el index.html usa `onclick="sendMessage()"` y `onkeypress="handleKeyPress(event)"`, adaptamos la lógica a esas funciones, asumiendo que el resto del script lo necesita.
+                rows.forEach(r => {
+                    const originalCode = (r[machineCol] || "").trim(); // <-- GUARDAMOS LA VERSIÓN ORIGINAL
+                    
+                    // Limpieza y estandarización para la CLAVE LÓGICA
+                    const cleanCode = originalCode.toUpperCase().replace(/[-_ ]/g, ''); 
+                    
+                    if (!originalCode || !cleanCode) return;
+                    
+                    // Si el cleanCode es nuevo, lo agregamos al estado
+                    if (!state.files.hasOwnProperty(cleanCode)) {
+                        state.machines.push({ clean: cleanCode, original: originalCode }); 
+                        state.files[cleanCode] = [];
+                    }
 
-// Adaptación de los IDs y funciones de envío:
-
-function handleKeyPress(event) {
-    if (event.key === 'Enter') {
-        sendMessage();
-    }
-}
-window.handleKeyPress = handleKeyPress;
-
-
-async function sendMessage() {
-    const text = $input.value.trim();
-    if (!text) {
-        $input.focus();
-        return;
-    }
-
-    showMessage(text, 'user');
-    $input.value = ''; // Limpiamos el campo después de enviar
-
-    const machine = detectMachineFromText(text);
-    
-    if (!machine) {
-        showMessage('No identifiqué el nombre del archivo. Escriba el nombre correcto.', 'bot');
-        $input.focus(); 
-        return;
-    }
-    
-    const cleanMachine = machine.trim().toUpperCase().replace(/[-_ ]/g, '');
-
-    showMessage(`🔍 Buscando opciones de archivos ${cleanMachine}...`, 'bot');
-    
-    // ** USAMOS EL ÍNDICE DE GOOGLE SHEETS **
-    const files = getFilesForMachine(cleanMachine); 
-    
-    if (files.length > 0) {
-        showOptions(cleanMachine, files);
-    } else {
-        showMessage(CONFIG.FALLBACK_TEXT, 'bot');
-        $input.focus(); 
-    }
-}
-window.sendMessage = sendMessage;
-
-
-// Utilidades (el, showMessage, getFileIcon, showOptions, handleViewClick, showMediaPreview, loadMachines, getFilesForMachine, detectMachineFromText)
-
-// Función el (Utilidades)
-function el(tag, cls, txt) {
-  const d = document.createElement(tag);
-  if (cls) d.className = cls;
-  if (txt) d.textContent = txt;
-  return d;
-}
-
-/**
- * Muestra un mensaje en el chat.
- */
-function showMessage(text, who = 'bot') {
-  const m = el('div', 'message ' + (who === 'user' ? 'user' : 'bot'));
-  
-  // Usamos <p> dentro del mensaje para seguir la estructura de tu style.css
-  const p = el('p');
-  
-  // Permite HTML si es inyectado (como los botones de opciones)
-  if (text.includes('<') || text.includes('>')) {
-    p.innerHTML = text.replace(/\n/g, '<br>'); 
-  } else {
-    p.innerText = text;
-  }
-  m.appendChild(p);
-
-  $messages.appendChild(m);
-  $messages.scrollTop = $messages.scrollHeight;
-}
-
-function getFileIcon(filename) {
-    const ext = filename.split('.').pop().toLowerCase();
-    switch (ext) {
-        case 'txt': return '📄'; case 'pdf': return '📑'; case 'mp4': return '🎬';
-        case 'jpg': case 'jpeg': case 'png': return '🖼️'; case 'doc': case 'docx': return '📝';
-        default: return '📎';
-    }
-}
-// script.js (Añadir cerca de las funciones sendMessage y handleViewClick)
-
-// ... resto del código ...
-
-/**
- * Limpia todos los mensajes del chat y vuelve a mostrar el saludo inicial.
- */
-function clearChat() {
-    // 1. Elimina todos los hijos de la ventana de mensajes
-    while ($messages.firstChild) {
-        $messages.removeChild($messages.firstChild);
-    }
-
-    // 2. Muestra el mensaje de bienvenida
-    const initialMessage = el('div', 'message bot');
-    const p = el('p');
-    p.innerHTML = 'Hola, soy el Asistente del area remanufactura. Por favor, seleccione el tema que desea visualizar).';
-    initialMessage.appendChild(p);
-    $messages.appendChild(initialMessage);
-
-    // 3. Vuelve a mostrar la pista de máquinas si ya se cargó el índice
-    if (state.machines.length > 0) {
-        showMessage(`✅ Índice de ${state.machines.length} Achivos cargados correctamente.`, 'bot');
-    }
-
-    $input.focus();
-}
-window.clearChat = clearChat; // Exportar al scope global para el onclick
-
-// ... resto del código ...
-/**
- * Muestra la lista de archivos disponibles con botones de Ver/Descargar.
- * Recibe un array de objetos de archivo: [{ name: "doc.pdf", id: "driveID", ext: "pdf" }, ...]
- */
-function showOptions(machine, files) {
-  // Use a wrapper div for all options instead of injecting raw HTML string directly
-  const wrap = el('div', 'msg bot');
-  const title = el('div', 'option-title-list');
-  title.innerHTML = `<strong>Respuestas para ${machine}:</strong>`;
-  wrap.appendChild(title);
-  
-  const list = el('div', 'options-list'); // Nuevo contenedor para la lista de opciones
-  
-  files.forEach(fileObj => {
-    const file = fileObj.name;
-    const fileId = fileObj.id;
-    const ext = fileObj.ext;
-    
-    // Construir URLs de Google Drive
-    const fullDownloadUrl = CONFIG.DRIVE_DOWNLOAD_BASE + fileId;
-    const fullPreviewUrl = CONFIG.DRIVE_PREVIEW_BASE + fileId + "/preview";
-    
-    const cleanFileName = file.replace(`.${ext}`, '').replace(/[-_]/g, ' ').toUpperCase();
-    const icon = getFileIcon(file);
-
-    // Contenedor de botones para un solo archivo
-    const fileContainer = el('div', 'file-option-group'); 
-
-    // Título del archivo
-    const fileTitle = el('span', 'file-title', icon + ' ' + cleanFileName);
-    fileContainer.appendChild(fileTitle);
-
-    // Botón para Visualizar/Ver 
-    const viewBtn = el('button', 'option-btn view-btn', '👁️ Ver / Abrir');
-    
-    // Usar addEventListener es más seguro que el 'onclick' en el HTML string
-    viewBtn.addEventListener('click', () => {
-        handleViewClick(fileId, file, ext);
-    });
-    fileContainer.appendChild(viewBtn);
-
-    // Botón para Descargar (usando <a>)
-    const downloadBtn = el('a', 'option-btn download-btn');
-    downloadBtn.textContent = '⬇️ Descargar';
-    downloadBtn.href = fullDownloadUrl;
-    downloadBtn.download = file; 
-    downloadBtn.target = '_blank'; 
-
-    fileContainer.appendChild(downloadBtn);
-    
-    list.appendChild(fileContainer);
-  });
-
-  wrap.appendChild(list);
-  $messages.appendChild(wrap);
-  $messages.scrollTop = $messages.scrollHeight;
-  $input.focus(); 
-}
-
-/**
- * Maneja la visualización del archivo al hacer clic en 'Ver/Abrir'.
- */
-function handleViewClick(fileId, filename, ext) {
-    showMessage(`(Usuario solicitó: Ver ${filename})`, 'user'); 
-    
-    const fullPreviewUrl = CONFIG.DRIVE_PREVIEW_BASE + fileId + "/preview";
-    
-    if (['mp4', 'jpg', 'jpeg', 'png'].includes(ext)) {
-        // Muestra una vista previa de medios (función simplificada para Drive)
-        showMediaPreview(fullPreviewUrl, filename, ext);
-    } else {
-        // Abre el archivo en una nueva pestaña (PDF, DOCX, TXT, etc.)
-        window.open(fullPreviewUrl, '_blank');
-    }
-}
-window.handleViewClick = handleViewClick; // Exportar al scope global
-
-/**
- * Muestra la vista previa de medios (Simplificado para Google Drive).
- */
-function showMediaPreview(url, filename, ext) {
-    // Para simplificar la implementación en Drive
-    
-    let mediaHtml = `<div class="media-preview-box">
-                       <strong>Vista Previa: ${filename}</strong><br>`;
-
-    if (ext === 'mp4') {
-        mediaHtml += `<p>El video del archivo se abrirá en una nueva pestaña. Por favor, revisa tus ventanas.</p>`;
-        window.open(url, '_blank'); // Abrir el video directamente
-    } else if (['jpg', 'jpeg', 'png'].includes(ext)) {
-        mediaHtml += `<p>La imagen se abrió en una nueva pestaña. Por favor, revisa tus ventanas.</p>`;
-        window.open(url, '_blank'); // Abrir la imagen directamente
-    }
-    
-    mediaHtml += '</div>';
-    showMessage(mediaHtml, 'bot');
-}
-
-// script.js (Función loadMachines MODIFICADA)
-
-/**
- * Carga el índice de máquinas y archivos desde Google Sheets.
- */
-async function loadMachines() {
-  try {
-    const res = await fetch(CONFIG.SHEET_CSV_URL);
-    if (!res.ok) throw new Error("No se pudo cargar la hoja. Código: " + res.status);
-    const csv = await res.text();
-    
-    // Procesa el CSV
-    const rows = csv.trim().split("\n").map(r => r.split(",").map(c => c.trim()));
-    const header = rows.shift().map(h => h.toLowerCase());
-    
-    const machineCol = header.findIndex(h => /maquina|codigo|machine|code/.test(h));
-    
-    rows.forEach(r => {
-      const machineCode = (r[machineCol] || r[0] || "").trim().toUpperCase().replace(/[-_ ]/g, '');
-      if (!machineCode) return;
-      
-      state.machines.push(machineCode);
-      state.files[machineCode] = [];
-
-      // Itera sobre las columnas para encontrar los pares (Nombre, ID)
-      for(let i = 0; i < r.length; i++) {
-        // Asume que la columna Nombre y ID tienen un encabezado que incluye 'nombre' y 'id' respectivamente
-        if (header[i].includes('nombre') && header[i+1] && header[i+1].includes('id')) {
-             const name = r[i];
-             const id = r[i+1];
-             
-             if (name && id) {
-                 const ext = name.split('.').pop().toLowerCase();
-                 state.files[machineCode].push({ name, id, ext });
-             }
+                    // Itera sobre las columnas para encontrar los pares (Nombre, ID)
+                    for(let i = 0; i < r.length; i++) {
+                        if (header[i].includes('nombre') && header[i+1] && header[i+1].includes('id')) {
+                            const name = r[i];
+                            const id = r[i+1];
+                            
+                            // Solo añade el archivo si hay nombre e ID
+                            if (name && id) {
+                                const ext = name.split('.').pop().toLowerCase();
+                                state.files[cleanCode].push({ name, id, ext });
+                            }
+                        }
+                    }
+                });
+                
+                // Una vez cargados, mostramos la lista de máquinas
+                renderMachineList();
+                
+            } catch (e) {
+                console.error("Error cargando lista de archivos:", e);
+                $listContainer.innerHTML = `<div class="initial-message" style="color: #dc3545;">
+                    ❌ **ERROR CRÍTICO:** No se pudo cargar la lista. ${e.message}
+                </div>`;
+            }
         }
-      }
-    });
-    
-    // Muestra una pista de las máquinas cargadas
-    const hintText = state.machines.slice(0, 6).join(", ") + (state.machines.length > 6 ? ", etc." : "");
 
-    // *** MODIFICACIÓN CLAVE AQUÍ ***
-    showMessage(`✅ ${state.machines.length} Archivos cargadas`, 'bot');
-    
-    if (state.machines.length > 0) {
-        showMessage(`Archivos disponibles: **${hintText}**`, 'bot');
-    }
-    // *** FIN MODIFICACIÓN ***
+        /**
+         * Muestra la lista de Códigos de Máquina/Máquinas.
+         */
+        function renderMachineList() {
+            $backButton.style.display = 'none'; // Ocultar el botón Volver
+            $listContainer.innerHTML = `
+                <div class="initial-message">
+                    Índices disponibles (${state.machines.length} índices):
+                </div>
+                <ul id="content-list"></ul>
+            `;
+            
+            const $ul = document.getElementById('content-list');
 
-    $input.focus(); 
-  } catch (e) {
-    console.warn("Error cargando lista de máquinas:", e);
-    showMessage("❌ **ERROR CRÍTICO:** No se pudo cargar la lista de archivos", 'bot');
-  }
-}
+            if (state.machines.length === 0) {
+                 $listContainer.innerHTML += '<div class="initial-message">No se encontraron códigos de máquina indexados.</div>';
+                 return;
+            }
+            
+            // Ordena la lista VISUAL por el nombre original (como aparece en Sheets)
+            const sortedMachines = [...state.machines].sort((a, b) => a.original.localeCompare(b.original));
 
-/**
- * Función para obtener archivos desde el estado (reemplaza listFilesForMachine)
- */
-function getFilesForMachine(machine) {
-    const cleanMachine = machine.trim().toUpperCase().replace(/[-_ ]/g, '');
-    return state.files[cleanMachine] || [];
-}
+            sortedMachines.forEach(machine => {
+                const fileCount = state.files[machine.clean].length;
+                
+                const listItem = document.createElement('li');
+                listItem.className = 'list-item machine-item';
+                
+                // USAMOS machine.original para la visualización (se respeta mayúsculas/minúsculas y espacios)
+                listItem.textContent = `⚙️ ${machine.original} (${fileCount} archivos)`; 
+                
+                // Usamos machine.clean y machine.original en el evento click
+                listItem.addEventListener('click', () => renderFilesList(machine.clean, machine.original));
+                
+                $ul.appendChild(listItem);
+            });
+        }
+        
+        /**
+         * Muestra la lista de Archivos para el código de máquina seleccionado.
+         * @param {string} cleanCode - Código limpio para buscar en el índice (Ej: "MAQ100").
+         * @param {string} originalCode - Código original para el título (Ej: "Maq-100").
+         */
+        function renderFilesList(cleanCode, originalCode) {
+            const files = state.files[cleanCode] || []; // Usamos cleanCode para la búsqueda
+            
+            $backButton.style.display = 'block'; // Mostrar el botón Volver
+            $listContainer.innerHTML = `
+                <div class="initial-message">
+                    Archivos <strong>${originalCode}</strong> (${files.length} disponibles):
+                </div>
+                <ul id="content-list"></ul>
+            `;
+            
+            const $ul = document.getElementById('content-list');
+            
+            if (files.length === 0) {
+                 $listContainer.innerHTML += '<div class="initial-message">No hay archivos asociados a este índice.</div>';
+                 return;
+            }
 
-/**
- * Función mejorada para detectar el código de máquina.
- */
-function detectMachineFromText(text) {
-  const t = text.toLowerCase().trim().replace(/[-_ ]/g, '');
-  
-  // 1. Detección basada en la lista de máquinas cargadas
-  for (const m of state.machines) {
-    if (t.includes(m.toLowerCase().replace(/[-_ ]/g, ''))) return m;
-  }
-  
-  // 2. Detección de un patrón de código genérico
-  const codeMatch = text.match(/\b[a-z0-9]{1,10}\b/i);
+            files.forEach(fileObj => {
+                const fileLink = createLinkElement(fileObj);
+                const listItem = document.createElement('li');
+                listItem.className = 'list-item';
+                listItem.appendChild(fileLink);
+                $ul.appendChild(listItem);
+            });
+        }
 
-  if (codeMatch) {
-      return codeMatch[0].toUpperCase().replace(/[-_ ]/g, '');
-  }
-  
-  return null;
-}
 
-// Inicializar la aplicación
-window.addEventListener('load', loadMachines);
+        /**
+         * Crea el elemento <a> con la estructura de link y estilos.
+         */
+        function createLinkElement(fileObj) {
+            const { name, id, ext } = fileObj;
+            
+            // La URL de Google Drive para previsualización o vista
+            const fullPreviewUrl = CONFIG.DRIVE_PREVIEW_BASE + id + "/view";
+
+            const link = document.createElement('a');
+            link.href = fullPreviewUrl;
+            link.target = '_blank'; // Abrir en una nueva pestaña
+            link.className = 'file-link';
+            
+            const icon = getFileIcon(name);
+            
+            link.innerHTML = `
+                <span class="file-name">${icon} ${name}</span>
+                <span class="file-ext">${ext.toUpperCase()}</span>
+            `;
+            
+            return link;
+        }
+
+        /**
+         * Función para obtener un icono representativo del tipo de archivo.
+         */
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            switch (ext) {
+                case 'pdf': return '📑'; 
+                case 'mp4': return '🎬';
+                case 'jpg': case 'jpeg': case 'png': return '🖼️'; 
+                case 'doc': case 'docx': return '📝';
+                case 'xlsx': case 'xls': return '📊';
+                case 'zip': return '📁';
+                default: return '📎';
+            }
+        }
+
+
+        // Inicializar la aplicación al cargar la ventana
+        window.addEventListener('load', loadData);
     </script>
 </body>
-
 </html>
-
-
-
-
