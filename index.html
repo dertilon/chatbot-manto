@@ -8,18 +8,19 @@
 <style>
     /* Paleta Industrial: Negro, Gris Oscuro, Naranja/Amarillo de advertencia */
     :root {
-        --color-bg-main: #1c1c1c; /* Fondo Oscuro */
-        --color-bg-chat: #2b2b2b; /* Fondo Contenido */
-        --color-accent: #ff9900; /* Naranja/Amarillo, color de advertencia/foco */
-        --color-text-light: #e0e0e0; /* Texto Claro */
-        --color-metal-border: #444; /* Borde Metálico */
-        --color-bot-bg: #3c3c3c; /* Fondo Bot */
-        --color-link: #4CAF50; /* Color para los links (Verde de "OK") */
+        --color-bg-main: #1c1c1c;
+        --color-bg-chat: #2b2b2b;
+        --color-accent: #ff9900;
+        --color-text-light: #e0e0e0;
+        --color-metal-border: #444;
+        --color-bot-bg: #3c3c3c;
+        --color-link: #4CAF50;
+        --color-new-tag: #00bcd4; /* Azul brillante para la etiqueta NUEVO */
     }
 
     /* Estilo de la página */
     body {
-        font-family: 'Monospace', 'Courier New', monospace; /* Fuente de Terminal/CLI */
+        font-family: 'Monospace', 'Courier New', monospace;
         background-color: #0d0d0d;
         color: var(--color-text-light);
         display: flex;
@@ -33,10 +34,10 @@
         background-size: 20px 20px;
     }
 
-    /* Contenedor principal de la Lista de Documentos */
+    /* Contenedor principal */
     .chatbot-container {
         width: 100%;
-        max-width: 600px; /* Más ancho para la lista */
+        max-width: 600px;
         background-color: var(--color-bg-main);
         border: 3px solid var(--color-metal-border);
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 5px var(--color-accent);
@@ -74,15 +75,11 @@
         padding: 15px;
         background-color: var(--color-bg-chat);
         min-height: 400px;
-        overflow-y: auto; /* Habilitar scroll */
+        overflow-y: auto;
         scrollbar-color: var(--color-accent) var(--color-bg-chat);
         scrollbar-width: thin;
     }
     
-    /* ******************************************* */
-    /* ESTILOS DE LISTA MODIFICADOS (REQUISITOS)   */
-    /* ******************************************* */
-
     /* Contenedor general de la lista */
     #content-list {
         list-style-type: none;
@@ -90,7 +87,7 @@
         margin: 0;
         display: flex;
         flex-direction: column;
-        gap: 8px; /* Espacio entre elementos */
+        gap: 8px;
     }
 
     /* Cada elemento de la lista (Máquina o Archivo) */
@@ -99,11 +96,11 @@
         border: 1px solid var(--color-metal-border);
         padding: 10px 15px;
         border-radius: 4px;
-        cursor: pointer; /* Cursor para indicar que es clickeable */
+        cursor: pointer;
         transition: background-color 0.2s, box-shadow 0.2s;
     }
     
-    /* Estilo específico para los códigos de máquina (más prominente) */
+    /* Estilo específico para los códigos de máquina */
     .machine-item {
         border-left: 5px solid var(--color-accent);
         font-weight: bold;
@@ -118,7 +115,7 @@
     /* Estilo para los links de Archivo */
     .file-link {
         text-decoration: none;
-        color: var(--color-link); /* Verde/Éxito para el link */
+        color: var(--color-link);
         font-weight: bold;
         display: flex;
         justify-content: space-between;
@@ -126,6 +123,12 @@
         font-size: 1em;
     }
     
+    .file-link .file-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
     .file-link .file-ext {
         font-size: 0.75em;
         color: var(--color-text-light);
@@ -135,21 +138,36 @@
     }
 
     /* ******************************************* */
-    /* Botón Volver (Sustituye al de Borrado)      */
+    /* ESTILO PARA LA ETIQUETA NUEVO               */
     /* ******************************************* */
-    
-    /* Contenedor de acciones (Botón de borrado) */
+    .new-tag {
+        font-size: 0.7em;
+        font-weight: bold;
+        color: var(--color-bg-main);
+        background-color: var(--color-new-tag); 
+        padding: 2px 6px;
+        border-radius: 3px;
+        margin-left: 10px;
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.7; }
+        100% { opacity: 1; }
+    }
+
+    /* Botón Volver */
     .input-container {
         display: flex;
-        justify-content: flex-start; /* Alinea el botón a la izquierda */
+        justify-content: flex-start;
         padding: 10px 15px;
         border-top: 1px solid var(--color-metal-border);
         background-color: var(--color-bg-main);
     }
     
-    /* Estilo para el botón Volver */
     #back-btn {
-        background-color: #555; /* Gris para "volver" */
+        background-color: #555;
         color: white;
         border: none;
         padding: 10px 15px;
@@ -157,7 +175,6 @@
         font-size: 1em;
         border-radius: 3px;
         transition: background-color 0.2s;
-        /* Inicialmente oculto */
         display: none; 
     }
 
@@ -177,18 +194,18 @@
     <div class="chatbot-container">
         <header class="chatbot-header">
             <i class="fas fa-file-alt"></i>
-            <h1>DOCUMENTACIÓN TÉCNICA REMANUFACTURA</h1>
-            <p>Selecciona un índice para ver los archivos disponibles.</p>
+            <h1>ÍNDICE DE DOCUMENTACIÓN TÉCNICA</h1>
+            <p>Selecciona el código de máquina para ver los archivos disponibles.</p>
         </header>
 
         <div class="input-container">
             <button id="back-btn" onclick="renderMachineList()">
-                <i class="fas fa-arrow-left"></i> Volver a la Lista de índices
+                <i class="fas fa-arrow-left"></i> Volver a la Lista de Máquinas
             </button>
         </div>
 
         <div id="document-list-container">
-            </div>
+        </div>
 
     </div>
     
@@ -198,19 +215,44 @@
             SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyjYPpbqPVD_0C4A9sfKghjJVyHcRi7GMzizMXe0uxbEZ4ITVnetb9wjdGsQN1CsoHdua1OPmsUVIr/pub?gid=0&single=true&output=csv",
             // ** URLs DE GOOGLE DRIVE **
             DRIVE_PREVIEW_BASE: "https://drive.google.com/file/d/",
+            // Clave de localStorage para guardar la última visita
+            LAST_VISIT_KEY: 'last_document_visit_timestamp' 
         };
 
         const state = { 
-            // Lista de códigos de máquina. Guarda el original y el limpio.
-            // Ej: [{ clean: 'MAQ100', original: 'MAQ-100' }, ...]
             machines: [], 
-            // Índice de archivos: { 'MAQ100': [{name: 'Guia.pdf', id: 'drive_id_1', ext: 'pdf'}, ... ] }
-            files: {} 
+            files: {},
+            lastVisit: 0 // Fecha de la última visita del usuario
         };
 
         const $listContainer = document.getElementById('document-list-container');
         const $backButton = document.getElementById('back-btn');
         
+        // --- LÓGICA DE FECHAS ---
+
+        /**
+         * Comprueba si el archivo es 'nuevo' comparando su fecha con la última visita.
+         * @param {string} fileDateString - Fecha de adición del archivo (en formato Date compatible, Ej: YYYY-MM-DD).
+         * @returns {boolean}
+         */
+        function isNewFile(fileDateString) {
+            if (!fileDateString) return false;
+
+            const fileTimestamp = new Date(fileDateString).getTime();
+            // Consideramos nuevo si el archivo es más reciente que la última visita.
+            // Usamos un margen (Ej: 2 días) para asegurar que el archivo se vea como nuevo.
+            const GRACE_PERIOD_MS = 2 * 24 * 60 * 60 * 1000; 
+
+            return fileTimestamp > (state.lastVisit - GRACE_PERIOD_MS);
+        }
+
+        /**
+         * Guarda el timestamp actual como la última visita.
+         */
+        function updateLastVisit() {
+            localStorage.setItem(CONFIG.LAST_VISIT_KEY, Date.now());
+            state.lastVisit = Date.now();
+        }
 
         // --- FUNCIONES DE LÓGICA DE ARCHIVOS ---
 
@@ -220,6 +262,9 @@
         async function loadData() {
             $listContainer.innerHTML = '<div class="initial-message">Cargando índice de archivos... <i class="fas fa-spinner fa-spin"></i></div>';
             
+            // 1. Obtener la última visita ANTES de cargar los datos
+            state.lastVisit = parseInt(localStorage.getItem(CONFIG.LAST_VISIT_KEY) || '0', 10);
+
             try {
                 const res = await fetch(CONFIG.SHEET_CSV_URL);
                 if (!res.ok) throw new Error("No se pudo cargar la hoja. Código: " + res.status);
@@ -231,43 +276,42 @@
                 const rows = csv.trim().split("\n").map(r => r.split(",").map(c => c.trim()));
                 const header = rows.shift().map(h => h.toLowerCase());
                 
-                // Busca la columna de código de máquina/título
                 const machineCol = header.findIndex(h => /maquina|codigo|machine|code/.test(h));
+                // *** NUEVA COLUMNA ***
+                const dateCol = header.findIndex(h => /fecha|date|modificaci.n/.test(h)); 
                 
                 if(machineCol === -1) {
                     throw new Error("No se encontró la columna de código de máquina en el encabezado del CSV.");
                 }
 
                 rows.forEach(r => {
-                    const originalCode = (r[machineCol] || "").trim(); // <-- GUARDAMOS LA VERSIÓN ORIGINAL
-                    
-                    // Limpieza y estandarización para la CLAVE LÓGICA
+                    const originalCode = (r[machineCol] || "").trim();
                     const cleanCode = originalCode.toUpperCase().replace(/[-_ ]/g, ''); 
                     
                     if (!originalCode || !cleanCode) return;
                     
-                    // Si el cleanCode es nuevo, lo agregamos al estado
                     if (!state.files.hasOwnProperty(cleanCode)) {
                         state.machines.push({ clean: cleanCode, original: originalCode }); 
                         state.files[cleanCode] = [];
                     }
 
-                    // Itera sobre las columnas para encontrar los pares (Nombre, ID)
                     for(let i = 0; i < r.length; i++) {
                         if (header[i].includes('nombre') && header[i+1] && header[i+1].includes('id')) {
                             const name = r[i];
                             const id = r[i+1];
-                            
-                            // Solo añade el archivo si hay nombre e ID
+                            const date = dateCol !== -1 ? r[dateCol] : ''; // Captura la fecha
+
                             if (name && id) {
                                 const ext = name.split('.').pop().toLowerCase();
-                                state.files[cleanCode].push({ name, id, ext });
+                                state.files[cleanCode].push({ name, id, ext, date }); // Guarda la fecha
                             }
                         }
                     }
                 });
                 
-                // Una vez cargados, mostramos la lista de máquinas
+                // 2. Después de cargar los datos, actualiza la última visita
+                updateLastVisit(); 
+                
                 renderMachineList();
                 
             } catch (e) {
@@ -282,10 +326,10 @@
          * Muestra la lista de Códigos de Máquina/Máquinas.
          */
         function renderMachineList() {
-            $backButton.style.display = 'none'; // Ocultar el botón Volver
+            $backButton.style.display = 'none';
             $listContainer.innerHTML = `
                 <div class="initial-message">
-                    Índices disponibles (${state.machines.length} índices):
+                    Códigos de Máquina disponibles (${state.machines.length} códigos):
                 </div>
                 <ul id="content-list"></ul>
             `;
@@ -297,19 +341,26 @@
                  return;
             }
             
-            // Ordena la lista VISUAL por el nombre original (como aparece en Sheets)
             const sortedMachines = [...state.machines].sort((a, b) => a.original.localeCompare(b.original));
 
             sortedMachines.forEach(machine => {
-                const fileCount = state.files[machine.clean].length;
+                const files = state.files[machine.clean];
+                const fileCount = files.length;
                 
                 const listItem = document.createElement('li');
                 listItem.className = 'list-item machine-item';
                 
-                // USAMOS machine.original para la visualización (se respeta mayúsculas/minúsculas y espacios)
-                listItem.textContent = `⚙️ ${machine.original} (${fileCount} archivos)`; 
+                // Verificar si hay algún archivo NUEVO en este índice para mostrar el icono en la máquina
+                const hasNew = files.some(file => isNewFile(file.date));
+                const newTagHtml = hasNew ? '<span class="new-tag">NUEVOS</span>' : '';
+
+                listItem.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>⚙️ ${machine.original} (${fileCount} archivos)</span>
+                        ${newTagHtml}
+                    </div>
+                `;
                 
-                // Usamos machine.clean y machine.original en el evento click
                 listItem.addEventListener('click', () => renderFilesList(machine.clean, machine.original));
                 
                 $ul.appendChild(listItem);
@@ -318,16 +369,14 @@
         
         /**
          * Muestra la lista de Archivos para el código de máquina seleccionado.
-         * @param {string} cleanCode - Código limpio para buscar en el índice (Ej: "MAQ100").
-         * @param {string} originalCode - Código original para el título (Ej: "Maq-100").
          */
         function renderFilesList(cleanCode, originalCode) {
-            const files = state.files[cleanCode] || []; // Usamos cleanCode para la búsqueda
+            const files = state.files[cleanCode] || [];
             
-            $backButton.style.display = 'block'; // Mostrar el botón Volver
+            $backButton.style.display = 'block';
             $listContainer.innerHTML = `
                 <div class="initial-message">
-                    Archivos <strong>${originalCode}</strong> (${files.length} disponibles):
+                    Archivos para la máquina <strong>${originalCode}</strong> (${files.length} disponibles):
                 </div>
                 <ul id="content-list"></ul>
             `;
@@ -335,7 +384,7 @@
             const $ul = document.getElementById('content-list');
             
             if (files.length === 0) {
-                 $listContainer.innerHTML += '<div class="initial-message">No hay archivos asociados a este índice.</div>';
+                 $listContainer.innerHTML += '<div class="initial-message">No hay archivos asociados a este código.</div>';
                  return;
             }
 
@@ -353,20 +402,25 @@
          * Crea el elemento <a> con la estructura de link y estilos.
          */
         function createLinkElement(fileObj) {
-            const { name, id, ext } = fileObj;
+            const { name, id, ext, date } = fileObj;
             
-            // La URL de Google Drive para previsualización o vista
             const fullPreviewUrl = CONFIG.DRIVE_PREVIEW_BASE + id + "/view";
 
             const link = document.createElement('a');
             link.href = fullPreviewUrl;
-            link.target = '_blank'; // Abrir en una nueva pestaña
+            link.target = '_blank';
             link.className = 'file-link';
             
             const icon = getFileIcon(name);
             
+            // Lógica y etiqueta NUEVO
+            const newTagHtml = isNewFile(date) ? '<span class="new-tag">NUEVO</span>' : '';
+            
             link.innerHTML = `
-                <span class="file-name">${icon} ${name}</span>
+                <div class="file-info">
+                    <span class="file-name">${icon} ${name}</span>
+                    ${newTagHtml}
+                </div>
                 <span class="file-ext">${ext.toUpperCase()}</span>
             `;
             
@@ -395,4 +449,3 @@
     </script>
 </body>
 </html>
-
