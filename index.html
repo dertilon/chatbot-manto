@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentación Técnica: Seleccionar Máquina ⚙️</title>
+    <title>Documentación Técnica: Acceso 🔒</title>
 </head>
 <style>
     /* Paleta Industrial: Negro, Gris Oscuro, Naranja/Amarillo de advertencia */
@@ -15,7 +15,7 @@
         --color-metal-border: #444;
         --color-bot-bg: #3c3c3c;
         --color-link: #4CAF50;
-        --color-new-tag: #00bcd4; /* Azul brillante para la etiqueta NUEVO */
+        --color-error: #dc3545;
     }
 
     /* Estilo de la página */
@@ -34,7 +34,7 @@
         background-size: 20px 20px;
     }
 
-    /* Contenedor principal */
+    /* Contenedor principal de la Lista de Documentos */
     .chatbot-container {
         width: 100%;
         max-width: 600px;
@@ -69,7 +69,67 @@
         color: var(--color-text-light);
     }
     
-    /* Ventana de Contenido */
+    /* ******************************************* */
+    /* ESTILOS DE LOGIN Y CONTENIDO PRINCIPAL      */
+    /* ******************************************* */
+
+    #login-screen {
+        padding: 30px;
+        text-align: center;
+        background-color: var(--color-bg-chat);
+    }
+
+    #login-screen h2 {
+        color: var(--color-accent);
+        margin-top: 0;
+    }
+
+    #username-input {
+        width: 80%;
+        padding: 10px;
+        border: 1px solid var(--color-metal-border);
+        background-color: #0f0f0f;
+        color: var(--color-text-light);
+        font-size: 1em;
+        font-family: inherit;
+        border-radius: 3px;
+        margin-bottom: 15px;
+    }
+
+    #login-btn {
+        background-color: var(--color-accent);
+        color: var(--color-bg-main);
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        border-radius: 3px;
+        transition: background-color 0.2s;
+    }
+
+    #login-btn:hover {
+        background-color: #cc7700;
+    }
+
+    #login-message {
+        margin-top: 15px;
+        color: var(--color-error);
+        font-weight: bold;
+        min-height: 20px;
+    }
+
+    /* Contenedor principal del contenido (debe ser flex para el layout interno) */
+    #main-content {
+        display: none; 
+        flex-direction: column; 
+        height: 100%; /* Asegura que el contenido ocupe el espacio */
+    }
+
+    /* ******************************************* */
+    /* ESTILOS DE LISTA (EXISTENTES)               */
+    /* ******************************************* */
+
     #document-list-container {
         flex-grow: 1;
         padding: 15px;
@@ -80,7 +140,6 @@
         scrollbar-width: thin;
     }
     
-    /* Contenedor general de la lista */
     #content-list {
         list-style-type: none;
         padding: 0;
@@ -90,7 +149,6 @@
         gap: 8px;
     }
 
-    /* Cada elemento de la lista (Máquina o Archivo) */
     .list-item {
         background-color: var(--color-bot-bg);
         border: 1px solid var(--color-metal-border);
@@ -100,7 +158,6 @@
         transition: background-color 0.2s, box-shadow 0.2s;
     }
     
-    /* Estilo específico para los códigos de máquina */
     .machine-item {
         border-left: 5px solid var(--color-accent);
         font-weight: bold;
@@ -112,7 +169,6 @@
         box-shadow: 0 0 8px rgba(255, 153, 0, 0.3);
     }
     
-    /* Estilo para los links de Archivo */
     .file-link {
         text-decoration: none;
         color: var(--color-link);
@@ -123,12 +179,6 @@
         font-size: 1em;
     }
     
-    .file-link .file-info {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
     .file-link .file-ext {
         font-size: 0.75em;
         color: var(--color-text-light);
@@ -137,27 +187,6 @@
         border-radius: 3px;
     }
 
-    /* ******************************************* */
-    /* ESTILO PARA LA ETIQUETA NUEVO               */
-    /* ******************************************* */
-    .new-tag {
-        font-size: 0.7em;
-        font-weight: bold;
-        color: var(--color-bg-main);
-        background-color: var(--color-new-tag); 
-        padding: 2px 6px;
-        border-radius: 3px;
-        margin-left: 10px;
-        animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-        0% { opacity: 1; }
-        50% { opacity: 0.7; }
-        100% { opacity: 1; }
-    }
-
-    /* Botón Volver */
     .input-container {
         display: flex;
         justify-content: flex-start;
@@ -194,77 +223,152 @@
     <div class="chatbot-container">
         <header class="chatbot-header">
             <i class="fas fa-file-alt"></i>
-            <h1>ÍNDICE DE DOCUMENTACIÓN TÉCNICA</h1>
-            <p>Selecciona el código de máquina para ver los archivos disponibles.</p>
+            <h1>DOCUMENTACIÓN TÉCNICA REMANUFACTURA</h1>
+            <p id="header-subtitle">Acceso de Usuario</p>
         </header>
 
-        <div class="input-container">
-            <button id="back-btn" onclick="renderMachineList()">
-                <i class="fas fa-arrow-left"></i> Volver a la Lista de Máquinas
-            </button>
+        <div id="login-screen">
+            <h2>Ingreso de Usuario 🔒</h2>
+            <form id="login-form">
+                <input type="text" id="username-input" placeholder="Nombre de Usuario" required onkeypress="if(event.key === 'Enter') checkLogin(event)">
+                <button type="button" id="login-btn" onclick="checkLogin()">ACCEDER</button>
+            </form>
+            <div id="login-message"></div>
         </div>
 
-        <div id="document-list-container">
+        <div id="main-content">
+            <div class="input-container">
+                <button id="back-btn" onclick="renderMachineList()">
+                    <i class="fas fa-arrow-left"></i> Volver a la Lista de Máquinas
+                </button>
+            </div>
+            <div id="document-list-container">
+            </div>
         </div>
-
     </div>
-    
     <script>
         const CONFIG = {
-            // ** URL DE EXPORTACIÓN CSV (Tu URL) **
+            // ************ CORRECCIÓN CLAVE ************
+            // Se usa ?gid=...&output=csv para cargar los datos correctamente.
+            USERS_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyjYPpbqPVD_0C4A9sfKghjJVyHcRi7GMzizMXe0uxbEZ4ITVnetb9wjdGsQN1CsoHdua1OPmsUVIr/pub?gid=490487396&single=true&output=csv",
+            // *******************************************
+            // ** URL DE LA APLICACIÓN WEB DE APPS SCRIPT **
+            REGISTRO_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbw2ylyFRvNJuVlhSfsGdIQducnR5jK0fgWQA9BlU1aVM01Ho5cTlIVdokebsG3a9G2q/exec", // <--- ¡PEGA AQUÍ TU URL COPIADA!
+            // URL DEL ÍNDICE DE ARCHIVOS (Mantenida)
             SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyjYPpbqPVD_0C4A9sfKghjJVyHcRi7GMzizMXe0uxbEZ4ITVnetb9wjdGsQN1CsoHdua1OPmsUVIr/pub?gid=0&single=true&output=csv",
-            // ** URLs DE GOOGLE DRIVE **
+            
             DRIVE_PREVIEW_BASE: "https://drive.google.com/file/d/",
-            // Clave de localStorage para guardar la última visita
-            LAST_VISIT_KEY: 'last_document_visit_timestamp' 
         };
-
         const state = { 
             machines: [], 
             files: {},
-            lastVisit: 0 // Fecha de la última visita del usuario
+            users: [], 
+            isLoggedIn: false,
+            currentUser: null
         };
-
+        const $loginScreen = document.getElementById('login-screen');
+        const $mainContent = document.getElementById('main-content');
+        const $usernameInput = document.getElementById('username-input');
+        const $loginMessage = document.getElementById('login-message');
+        const $headerSubtitle = document.getElementById('header-subtitle');
         const $listContainer = document.getElementById('document-list-container');
         const $backButton = document.getElementById('back-btn');
-        
-        // --- LÓGICA DE FECHAS ---
-
+        // --- FUNCIÓN DE LIMPIEZA MEJORADA ---
         /**
-         * Comprueba si el archivo es 'nuevo' comparando su fecha con la última visita.
-         * @param {string} fileDateString - Fecha de adición del archivo (en formato Date compatible, Ej: YYYY-MM-DD).
-         * @returns {boolean}
+         * Limpia y estandariza el nombre de usuario eliminando caracteres no alfanuméricos 
+         * y convirtiendo a minúsculas.
          */
-        function isNewFile(fileDateString) {
-            if (!fileDateString) return false;
-
-            const fileTimestamp = new Date(fileDateString).getTime();
-            // Consideramos nuevo si el archivo es más reciente que la última visita.
-            // Usamos un margen (Ej: 2 días) para asegurar que el archivo se vea como nuevo.
-            const GRACE_PERIOD_MS = 2 * 24 * 60 * 60 * 1000; 
-
-            return fileTimestamp > (state.lastVisit - GRACE_PERIOD_MS);
+        function cleanUsername(username) {
+            if (!username) return '';
+            // Permite letras (a-z) y números (0-9). Elimina todo lo demás (espacios, guiones, puntos).
+            return username.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
         }
-
+        // --- LÓGICA DE ACCESO (LOGIN) ---
         /**
-         * Guarda el timestamp actual como la última visita.
+         * Carga la lista de usuarios desde la hoja 'usuarios'.
          */
-        function updateLastVisit() {
-            localStorage.setItem(CONFIG.LAST_VISIT_KEY, Date.now());
-            state.lastVisit = Date.now();
+        async function loadUsers() {
+            $loginMessage.textContent = 'Cargando lista de usuarios...';
+            try {
+                const res = await fetch(CONFIG.USERS_CSV_URL);
+                if (!res.ok) throw new Error("No se pudo cargar la lista de usuarios. (Error de red o publicación)");
+                const csv = await res.text();
+                
+                // Asegúrate de que el CSV no es solo la palabra "Not Found" o un error HTML
+                if (csv.length < 50 && !csv.includes(',')) {
+                    throw new Error("El archivo CSV está vacío o el GID es incorrecto.");
+                }
+
+                const rows = csv.trim().split("\n").map(r => r.split(",").map(c => c.trim()));
+                const header = rows.shift().map(h => h.toLowerCase());
+                
+                const userCol = header.findIndex(h => /usuario|user/.test(h));
+                
+                if (userCol === -1) {
+                    throw new Error("Columna 'Usuario' no encontrada. Verifique el encabezado en su hoja.");
+                }
+
+                // Mapea y limpia cada usuario de la hoja para el estado
+                state.users = rows.map(r => cleanUsername(r[userCol] || "")).filter(u => u.length > 0);
+                
+                if (state.users.length === 0) {
+                     $loginMessage.textContent = 'Error: No se encontraron usuarios válidos en la hoja. (Revisar datos).';
+                     return;
+                }
+
+                $loginMessage.textContent = '';
+                $usernameInput.focus();
+                
+            } catch (e) {
+                $loginMessage.textContent = `❌ Error de Comunicación: ${e.message}. Revise su URL (USERS_CSV_URL) y la publicación CSV.`;
+                console.error("Error cargando usuarios:", e);
+            }
         }
-
-        // --- FUNCIONES DE LÓGICA DE ARCHIVOS ---
-
         /**
-         * Carga el índice de máquinas y archivos desde Google Sheets.
+         * Verifica el acceso del usuario.
          */
+        function checkLogin(event) {
+            if (event && event.type === 'submit') event.preventDefault();
+            // Limpiar el input del usuario para la comparación
+            const enteredUsername = cleanUsername($usernameInput.value);
+            if (state.users.length === 0) {
+                $loginMessage.textContent = 'El sistema de usuarios aún no está disponible (error de carga inicial).';
+                return;
+            }
+            if (state.users.includes(enteredUsername)) {
+                // Guardamos el nombre original, no la versión limpia, para el saludo
+                state.currentUser = $usernameInput.value.trim(); 
+                state.isLoggedIn = true;
+                // Ocultar login y mostrar contenido principal
+                $loginScreen.style.display = 'none';
+                $mainContent.style.display = 'flex'; 
+                $headerSubtitle.textContent = `Usuario, ${state.currentUser.toUpperCase()}`;
+                // Iniciar la carga del índice de documentos
+                loadData();
+            } else {
+                $loginMessage.textContent = '❌ Usuario no válido. Intente de nuevo.';
+                $usernameInput.value = '';
+                $usernameInput.focus();
+            }
+            // ... dentro de function checkLogin(event) {
+if (state.users.includes(enteredUsername)) {
+    // ... código de login exitoso ...
+    // 1. Iniciar la carga del índice de documentos
+    loadData();
+    // 2. REGISTRAR EL ACCESO
+    logAccess(state.currentUser); // Usamos el nombre original sin limpiar
+} else {
+    // ... código de usuario no válido ...
+}
+// ...
+        }
+        window.checkLogin = checkLogin; 
+
+        // --- LÓGICA DE ARCHIVOS (MANTENIDA) ---
+
         async function loadData() {
             $listContainer.innerHTML = '<div class="initial-message">Cargando índice de archivos... <i class="fas fa-spinner fa-spin"></i></div>';
             
-            // 1. Obtener la última visita ANTES de cargar los datos
-            state.lastVisit = parseInt(localStorage.getItem(CONFIG.LAST_VISIT_KEY) || '0', 10);
-
             try {
                 const res = await fetch(CONFIG.SHEET_CSV_URL);
                 if (!res.ok) throw new Error("No se pudo cargar la hoja. Código: " + res.status);
@@ -277,8 +381,6 @@
                 const header = rows.shift().map(h => h.toLowerCase());
                 
                 const machineCol = header.findIndex(h => /maquina|codigo|machine|code/.test(h));
-                // *** NUEVA COLUMNA ***
-                const dateCol = header.findIndex(h => /fecha|date|modificaci.n/.test(h)); 
                 
                 if(machineCol === -1) {
                     throw new Error("No se encontró la columna de código de máquina en el encabezado del CSV.");
@@ -299,37 +401,30 @@
                         if (header[i].includes('nombre') && header[i+1] && header[i+1].includes('id')) {
                             const name = r[i];
                             const id = r[i+1];
-                            const date = dateCol !== -1 ? r[dateCol] : ''; // Captura la fecha
-
+                            
                             if (name && id) {
                                 const ext = name.split('.').pop().toLowerCase();
-                                state.files[cleanCode].push({ name, id, ext, date }); // Guarda la fecha
+                                state.files[cleanCode].push({ name, id, ext });
                             }
                         }
                     }
                 });
                 
-                // 2. Después de cargar los datos, actualiza la última visita
-                updateLastVisit(); 
-                
                 renderMachineList();
                 
             } catch (e) {
                 console.error("Error cargando lista de archivos:", e);
-                $listContainer.innerHTML = `<div class="initial-message" style="color: #dc3545;">
-                    ❌ **ERROR CRÍTICO:** No se pudo cargar la lista. ${e.message}
+                $listContainer.innerHTML = `<div class="initial-message" style="color: var(--color-error);">
+                    ❌ **ERROR CRÍTICO:** No se pudo cargar el índice de documentos. ${e.message}
                 </div>`;
             }
         }
 
-        /**
-         * Muestra la lista de Códigos de Máquina/Máquinas.
-         */
         function renderMachineList() {
             $backButton.style.display = 'none';
             $listContainer.innerHTML = `
                 <div class="initial-message">
-                    Códigos de Máquina disponibles (${state.machines.length} códigos):
+                    Archivos disponibles (${state.machines.length}):
                 </div>
                 <ul id="content-list"></ul>
             `;
@@ -344,39 +439,27 @@
             const sortedMachines = [...state.machines].sort((a, b) => a.original.localeCompare(b.original));
 
             sortedMachines.forEach(machine => {
-                const files = state.files[machine.clean];
-                const fileCount = files.length;
+                const fileCount = state.files[machine.clean].length;
                 
                 const listItem = document.createElement('li');
                 listItem.className = 'list-item machine-item';
                 
-                // Verificar si hay algún archivo NUEVO en este índice para mostrar el icono en la máquina
-                const hasNew = files.some(file => isNewFile(file.date));
-                const newTagHtml = hasNew ? '<span class="new-tag">NUEVOS</span>' : '';
-
-                listItem.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>⚙️ ${machine.original} (${fileCount} archivos)</span>
-                        ${newTagHtml}
-                    </div>
-                `;
+                listItem.textContent = `⚙️ ${machine.original} (${fileCount} archivos)`;
                 
                 listItem.addEventListener('click', () => renderFilesList(machine.clean, machine.original));
                 
                 $ul.appendChild(listItem);
             });
         }
-        
-        /**
-         * Muestra la lista de Archivos para el código de máquina seleccionado.
-         */
+        window.renderMachineList = renderMachineList;
+
         function renderFilesList(cleanCode, originalCode) {
             const files = state.files[cleanCode] || [];
             
             $backButton.style.display = 'block';
             $listContainer.innerHTML = `
                 <div class="initial-message">
-                    Archivos para la máquina <strong>${originalCode}</strong> (${files.length} disponibles):
+                    Archivos <strong>${originalCode}</strong> (${files.length} disponibles):
                 </div>
                 <ul id="content-list"></ul>
             `;
@@ -397,13 +480,8 @@
             });
         }
 
-
-        /**
-         * Crea el elemento <a> con la estructura de link y estilos.
-         */
         function createLinkElement(fileObj) {
-            const { name, id, ext, date } = fileObj;
-            
+            const { name, id, ext } = fileObj;
             const fullPreviewUrl = CONFIG.DRIVE_PREVIEW_BASE + id + "/view";
 
             const link = document.createElement('a');
@@ -413,23 +491,14 @@
             
             const icon = getFileIcon(name);
             
-            // Lógica y etiqueta NUEVO
-            const newTagHtml = isNewFile(date) ? '<span class="new-tag">NUEVO</span>' : '';
-            
             link.innerHTML = `
-                <div class="file-info">
-                    <span class="file-name">${icon} ${name}</span>
-                    ${newTagHtml}
-                </div>
+                <span class="file-name">${icon} ${name}</span>
                 <span class="file-ext">${ext.toUpperCase()}</span>
             `;
             
             return link;
         }
 
-        /**
-         * Función para obtener un icono representativo del tipo de archivo.
-         */
         function getFileIcon(filename) {
             const ext = filename.split('.').pop().toLowerCase();
             switch (ext) {
@@ -443,9 +512,37 @@
             }
         }
 
+        window.addEventListener('load', loadUsers);
+        /**
+ * Envía una petición al Apps Script para registrar el usuario y la hora de acceso.
+ * @param {string} user - Nombre del usuario.
+ */
+async function logAccess(user) {
+    if (!CONFIG.REGISTRO_WEBAPP_URL) {
+        console.error("REGISTRO_WEBAPP_URL no está configurada.");
+        return;
+    }
+    
+    try {
+        const params = new URLSearchParams({
+            usuario: user,
+            // Agregamos la IP como 'N/A' porque el script la obtendrá o la marcará como 'N/D'
+            ip_address: 'N/A' 
+        });
 
-        // Inicializar la aplicación al cargar la ventana
-        window.addEventListener('load', loadData);
+        // Petición POST al Apps Script
+        await fetch(CONFIG.REGISTRO_WEBAPP_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Necesario para evitar errores CORS en implementaciones sencillas
+            body: params
+        });
+        // Nota: No se puede verificar la respuesta debido a 'no-cors', solo asumimos el éxito.
+        console.log(`Registro de acceso para ${user} enviado exitosamente.`);
+        
+    } catch (error) {
+        console.error("Error al registrar el acceso:", error);
+    }
+}
     </script>
 </body>
 </html>
