@@ -4,227 +4,236 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentación Técnica: Acceso 🔒</title>
-</head>
-<style>
-    /* Paleta Industrial: Negro, Gris Oscuro, Naranja/Amarillo de advertencia */
-    :root {
-        --color-bg-main: #1c1c1c;
-        --color-bg-chat: #2b2b2b;
-        --color-accent: #ff9900;
-        --color-text-light: #e0e0e0;
-        --color-metal-border: #444;
-        --color-bot-bg: #3c3c3c;
-        --color-link: #4CAF50;
-        --color-error: #dc3545;
-    }
 
-    /* Estilo de la página */
-    body {
-        font-family: 'Monospace', 'Courier New', monospace;
-        background-color: #0d0d0d;
-        color: var(--color-text-light);
-        display: flex;
-        justify-content: center;
-        align-items: flex-start; 
-        min-height: 100vh;
-        padding: 40px 20px;
-        margin: 0;
-        background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), 
-                          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-        background-size: 20px 20px;
-    }
+    <style>
+        /* Paleta Industrial: Negro, Gris Oscuro, Naranja/Amarillo de advertencia */
+        :root {
+            --color-bg-main: #1c1c1c;
+            --color-bg-chat: #2b2b2b;
+            --color-accent: #ff9900;
+            --color-text-light: #e0e0e0;
+            --color-metal-border: #444;
+            --color-bot-bg: #3c3c3c;
+            --color-link: #4CAF50;
+            --color-error: #dc3545;
+        }
 
-    /* Contenedor principal de la Lista de Documentos */
-    .chatbot-container {
-        width: 100%;
-        max-width: 600px;
-        background-color: var(--color-bg-main);
-        border: 3px solid var(--color-metal-border);
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 5px var(--color-accent);
-        display: flex;
-        flex-direction: column;
-        border-radius: 5px;
-        overflow: hidden;
-    }
+        /* Estilo de la página */
+        body {
+            font-family: 'Monospace', 'Courier New', monospace;
+            background-color: #0d0d0d;
+            color: var(--color-text-light);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            min-height: 100vh;
+            padding: 40px 20px;
+            margin: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
 
-    /* Encabezado */
-    .chatbot-header {
-        background-color: var(--color-metal-border);
-        color: var(--color-text-light);
-        padding: 15px;
-        text-align: center;
-        border-bottom: 2px solid var(--color-accent);
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    }
+        /* Contenedor principal de la Lista de Documentos */
+        .chatbot-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--color-bg-main);
+            border: 3px solid var(--color-metal-border);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 5px var(--color-accent);
+            display: flex;
+            flex-direction: column;
+            border-radius: 5px;
+            overflow: hidden;
+        }
 
-    .chatbot-header h1 {
-        margin: 5px 0 0;
-        font-size: 1.4em;
-        color: var(--color-accent);
-    }
+        /* Encabezado */
+        .chatbot-header {
+            background-color: var(--color-metal-border);
+            color: var(--color-text-light);
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid var(--color-accent);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
 
-    .chatbot-header p {
-        margin: 0;
-        font-size: 0.9em;
-        color: var(--color-text-light);
-    }
-    
-    /* ******************************************* */
-    /* ESTILOS DE LOGIN Y CONTENIDO PRINCIPAL      */
-    /* ******************************************* */
+        .chatbot-header h1 {
+            margin: 5px 0 0;
+            font-size: 1.4em;
+            color: var(--color-accent);
+        }
 
-    #login-screen {
-        padding: 30px;
-        text-align: center;
-        background-color: var(--color-bg-chat);
-    }
+        .chatbot-header p {
+            margin: 0;
+            font-size: 0.9em;
+            color: var(--color-text-light);
+        }
+        /* Estilo para resaltar el nombre de usuario/nombre completo */
+        #header-username {
+            color: 0,0,0,0 ; /* Mismo color del subtítulo de la imagen */
+        /* Subraya el texto como en la imagen */
+            font-weight: bold;
+        }
+        
+        /* ******************************************* */
+        /* ESTILOS DE LOGIN Y CONTENIDO PRINCIPAL      */
+        /* ******************************************* */
 
-    #login-screen h2 {
-        color: var(--color-accent);
-        margin-top: 0;
-    }
+        #login-screen {
+            padding: 30px;
+            text-align: center;
+            background-color: var(--color-bg-chat);
+        }
 
-    #username-input {
-        width: 80%;
-        padding: 10px;
-        border: 1px solid var(--color-metal-border);
-        background-color: #0f0f0f;
-        color: var(--color-text-light);
-        font-size: 1em;
-        font-family: inherit;
-        border-radius: 3px;
-        margin-bottom: 15px;
-    }
+        #login-screen h2 {
+            color: var(--color-accent);
+            margin-top: 0;
+        }
 
-    #login-btn {
-        background-color: var(--color-accent);
-        color: var(--color-bg-main);
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        font-size: 1em;
-        font-weight: bold;
-        border-radius: 3px;
-        transition: background-color 0.2s;
-    }
+        #username-input {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid var(--color-metal-border);
+            background-color: #0f0f0f;
+            color: var(--color-text-light);
+            font-size: 1em;
+            font-family: inherit;
+            border-radius: 3px;
+            margin-bottom: 15px;
+        }
 
-    #login-btn:hover {
-        background-color: #cc7700;
-    }
+        #login-btn {
+            background-color: var(--color-accent);
+            color: var(--color-bg-main);
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
 
-    #login-message {
-        margin-top: 15px;
-        color: var(--color-error);
-        font-weight: bold;
-        min-height: 20px;
-    }
+        #login-btn:hover {
+            background-color: #cc7700;
+        }
 
-    /* Contenedor principal del contenido (debe ser flex para el layout interno) */
-    #main-content {
-        display: none; 
-        flex-direction: column; 
-        height: 100%; /* Asegura que el contenido ocupe el espacio */
-    }
+        #login-message {
+            margin-top: 15px;
+            color: var(--color-error);
+            font-weight: bold;
+            min-height: 20px;
+        }
 
-    /* ******************************************* */
-    /* ESTILOS DE LISTA (EXISTENTES)               */
-    /* ******************************************* */
+        /* Contenedor principal del contenido (debe ser flex para el layout interno) */
+        #main-content {
+            display: none; 
+            flex-direction: column; 
+            height: 100%; /* Asegura que el contenido ocupe el espacio */
+        }
 
-    #document-list-container {
-        flex-grow: 1;
-        padding: 15px;
-        background-color: var(--color-bg-chat);
-        min-height: 400px;
-        overflow-y: auto;
-        scrollbar-color: var(--color-accent) var(--color-bg-chat);
-        scrollbar-width: thin;
-    }
-    
-    #content-list {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
+        /* ******************************************* */
+        /* ESTILOS DE LISTA (EXISTENTES)               */
+        /* ******************************************* */
 
-    .list-item {
-        background-color: var(--color-bot-bg);
-        border: 1px solid var(--color-metal-border);
-        padding: 10px 15px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.2s, box-shadow 0.2s;
-    }
-    
-    .machine-item {
-        border-left: 5px solid var(--color-accent);
-        font-weight: bold;
-        color: var(--color-text-light);
-    }
+        #document-list-container {
+            flex-grow: 1;
+            padding: 15px;
+            background-color: var(--color-bg-chat);
+            min-height: 400px;
+            overflow-y: auto;
+            scrollbar-color: var(--color-accent) var(--color-bg-chat);
+            scrollbar-width: thin;
+        }
+        
+        #content-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-    .list-item:hover {
-        background-color: #3c3c3c;
-        box-shadow: 0 0 8px rgba(255, 153, 0, 0.3);
-    }
-    
-    .file-link {
-        text-decoration: none;
-        color: var(--color-link);
-        font-weight: bold;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 1em;
-    }
-    
-    .file-link .file-ext {
-        font-size: 0.75em;
-        color: var(--color-text-light);
-        background-color: #555;
-        padding: 3px 6px;
-        border-radius: 3px;
-    }
+        .list-item {
+            background-color: var(--color-bot-bg);
+            border: 1px solid var(--color-metal-border);
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .machine-item {
+            border-left: 5px solid var(--color-accent);
+            font-weight: bold;
+            color: var(--color-text-light);
+        }
 
-    .input-container {
-        display: flex;
-        justify-content: flex-start;
-        padding: 10px 15px;
-        border-top: 1px solid var(--color-metal-border);
-        background-color: var(--color-bg-main);
-    }
-    
-    #back-btn {
-        background-color: #555;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        cursor: pointer;
-        font-size: 1em;
-        border-radius: 3px;
-        transition: background-color 0.2s;
-        display: none; 
-    }
+        .list-item:hover {
+            background-color: #3c3c3c;
+            box-shadow: 0 0 8px rgba(255, 153, 0, 0.3);
+        }
+        
+        .file-link {
+            text-decoration: none;
+            color: var(--color-link);
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1em;
+        }
+        
+        .file-link .file-ext {
+            font-size: 0.75em;
+            color: var(--color-text-light);
+            background-color: #555;
+            padding: 3px 6px;
+            border-radius: 3px;
+        }
 
-    #back-btn:hover {
-        background-color: #777;
-    }
-    
-    .initial-message {
-        color: var(--color-accent);
-        margin-bottom: 20px;
-        padding-bottom: 5px;
-        border-bottom: 1px dashed var(--color-metal-border);
-        font-size: 1.1em;
-    }
-</style>
+        .input-container {
+            display: flex;
+            justify-content: flex-start;
+            padding: 10px 15px;
+            border-top: 1px solid var(--color-metal-border);
+            background-color: var(--color-bg-main);
+        }
+        
+        #back-btn {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+            display: none; 
+        }
+
+        #back-btn:hover {
+            background-color: #777;
+        }
+        
+        .initial-message {
+            color: var(--color-accent);
+            margin-bottom: 20px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed var(--color-metal-border);
+            font-size: 1.1em;
+        }
+    </style>
+    </head>
 <body>
     <div class="chatbot-container">
         <header class="chatbot-header">
             <i class="fas fa-file-alt"></i>
             <h1>DOCUMENTACIÓN TÉCNICA REMANUFACTURA</h1>
-            <p id="header-subtitle">Acceso de Usuario</p>
+            <p id="header-subtitle">
+                Usuario: <span id="header-username">Usuario</span>
+            </p>
         </header>
 
         <div id="login-screen">
@@ -239,7 +248,7 @@
         <div id="main-content">
             <div class="input-container">
                 <button id="back-btn" onclick="renderMachineList()">
-                    <i class="fas fa-arrow-left"></i> Volver a la Lista de Máquinas
+                    <i class="fas fa-arrow-left"></i> Volver a la Lista de archivos
                 </button>
             </div>
             <div id="document-list-container">
@@ -248,45 +257,33 @@
     </div>
     <script>
         const CONFIG = {
-            // ************ CORRECCIÓN CLAVE ************
-            // Se usa ?gid=...&output=csv para cargar los datos correctamente.
             USERS_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyjYPpbqPVD_0C4A9sfKghjJVyHcRi7GMzizMXe0uxbEZ4ITVnetb9wjdGsQN1CsoHdua1OPmsUVIr/pub?gid=490487396&single=true&output=csv",
-            // *******************************************
-            // ** URL DE LA APLICACIÓN WEB DE APPS SCRIPT **
-            REGISTRO_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbw2ylyFRvNJuVlhSfsGdIQducnR5jK0fgWQA9BlU1aVM01Ho5cTlIVdokebsG3a9G2q/exec", // <--- ¡PEGA AQUÍ TU URL COPIADA!
-            // URL DEL ÍNDICE DE ARCHIVOS (Mantenida)
+            REGISTRO_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbw2ylyFRvNJuVlhSfsGdIQducnR5jK0fgWQA9BlU1aVM01Ho5cTlIVdokebsG3a9G2q/exec",
             SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyjYPpbqPVD_0C4A9sfKghjJVyHcRi7GMzizMXe0uxbEZ4ITVnetb9wjdGsQN1CsoHdua1OPmsUVIr/pub?gid=0&single=true&output=csv",
-            
             DRIVE_PREVIEW_BASE: "https://drive.google.com/file/d/",
         };
         const state = { 
             machines: [], 
             files: {},
             users: [], 
-            isLoggedIn: false,
-            currentUser: null
+            currentUser: null,
+            currentFullName: null,
+            isLoggedIn: false
         };
         const $loginScreen = document.getElementById('login-screen');
         const $mainContent = document.getElementById('main-content');
         const $usernameInput = document.getElementById('username-input');
         const $loginMessage = document.getElementById('login-message');
         const $headerSubtitle = document.getElementById('header-subtitle');
+        const $headerUsername = document.getElementById('header-username');
         const $listContainer = document.getElementById('document-list-container');
         const $backButton = document.getElementById('back-btn');
-        // --- FUNCIÓN DE LIMPIEZA MEJORADA ---
-        /**
-         * Limpia y estandariza el nombre de usuario eliminando caracteres no alfanuméricos 
-         * y convirtiendo a minúsculas.
-         */
+
         function cleanUsername(username) {
             if (!username) return '';
-            // Permite letras (a-z) y números (0-9). Elimina todo lo demás (espacios, guiones, puntos).
             return username.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
         }
-        // --- LÓGICA DE ACCESO (LOGIN) ---
-        /**
-         * Carga la lista de usuarios desde la hoja 'usuarios'.
-         */
+
         async function loadUsers() {
             $loginMessage.textContent = 'Cargando lista de usuarios...';
             try {
@@ -294,22 +291,30 @@
                 if (!res.ok) throw new Error("No se pudo cargar la lista de usuarios. (Error de red o publicación)");
                 const csv = await res.text();
                 
-                // Asegúrate de que el CSV no es solo la palabra "Not Found" o un error HTML
                 if (csv.length < 50 && !csv.includes(',')) {
                     throw new Error("El archivo CSV está vacío o el GID es incorrecto.");
                 }
 
-                const rows = csv.trim().split("\n").map(r => r.split(",").map(c => c.trim()));
-                const header = rows.shift().map(h => h.toLowerCase());
+                // Usamos una regex para manejar comas dentro de comillas (si aplica)
+                const rows = csv.trim().split("\n").map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/"/g, '').trim()));
+                rows.shift(); // Quitamos el encabezado
                 
-                const userCol = header.findIndex(h => /usuario|user/.test(h));
-                
-                if (userCol === -1) {
-                    throw new Error("Columna 'Usuario' no encontrada. Verifique el encabezado en su hoja.");
+                const userCol = 0; 
+                const nameCol = 1; 
+
+                if (rows.length === 0 || rows[0].length < 2) {
+                    throw new Error("La hoja de usuarios no tiene datos o no tiene al menos dos columnas.");
                 }
 
-                // Mapea y limpia cada usuario de la hoja para el estado
-                state.users = rows.map(r => cleanUsername(r[userCol] || "")).filter(u => u.length > 0);
+                state.users = rows.map(r => {
+                    const userCode = r[userCol] || "";
+                    const fullName = r[nameCol] || "";
+                    return {
+                        cleanUser: cleanUsername(userCode),
+                        user: userCode.trim(),
+                        name: fullName.trim()
+                    };
+                }).filter(u => u.cleanUser.length > 0);
                 
                 if (state.users.length === 0) {
                      $loginMessage.textContent = 'Error: No se encontraron usuarios válidos en la hoja. (Revisar datos).';
@@ -324,47 +329,37 @@
                 console.error("Error cargando usuarios:", e);
             }
         }
-        /**
-         * Verifica el acceso del usuario.
-         */
+
         function checkLogin(event) {
             if (event && event.type === 'submit') event.preventDefault();
-            // Limpiar el input del usuario para la comparación
             const enteredUsername = cleanUsername($usernameInput.value);
+            
             if (state.users.length === 0) {
                 $loginMessage.textContent = 'El sistema de usuarios aún no está disponible (error de carga inicial).';
                 return;
             }
-            if (state.users.includes(enteredUsername)) {
-                // Guardamos el nombre original, no la versión limpia, para el saludo
-                state.currentUser = $usernameInput.value.trim(); 
+
+            const userMatch = state.users.find(u => u.cleanUser === enteredUsername);
+
+            if (userMatch) {
+                state.currentUser = userMatch.user; 
+                state.currentFullName = userMatch.name;
                 state.isLoggedIn = true;
-                // Ocultar login y mostrar contenido principal
+                
                 $loginScreen.style.display = 'none';
                 $mainContent.style.display = 'flex'; 
-                $headerSubtitle.textContent = `Usuario, ${state.currentUser.toUpperCase()}`;
-                // Iniciar la carga del índice de documentos
+                
+                $headerUsername.textContent = `${state.currentUser.toUpperCase()}, ${state.currentFullName}`;
+                
                 loadData();
+                logAccess(state.currentUser);
             } else {
                 $loginMessage.textContent = '❌ Usuario no válido. Intente de nuevo.';
                 $usernameInput.value = '';
                 $usernameInput.focus();
             }
-            // ... dentro de function checkLogin(event) {
-if (state.users.includes(enteredUsername)) {
-    // ... código de login exitoso ...
-    // 1. Iniciar la carga del índice de documentos
-    loadData();
-    // 2. REGISTRAR EL ACCESO
-    logAccess(state.currentUser); // Usamos el nombre original sin limpiar
-} else {
-    // ... código de usuario no válido ...
-}
-// ...
         }
         window.checkLogin = checkLogin; 
-
-        // --- LÓGICA DE ARCHIVOS (MANTENIDA) ---
 
         async function loadData() {
             $listContainer.innerHTML = '<div class="initial-message">Cargando índice de archivos... <i class="fas fa-spinner fa-spin"></i></div>';
@@ -377,7 +372,7 @@ if (state.users.includes(enteredUsername)) {
                 state.machines = [];
                 state.files = {};
 
-                const rows = csv.trim().split("\n").map(r => r.split(",").map(c => c.trim()));
+                const rows = csv.trim().split("\n").map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/"/g, '').trim()));
                 const header = rows.shift().map(h => h.toLowerCase());
                 
                 const machineCol = header.findIndex(h => /maquina|codigo|machine|code/.test(h));
@@ -398,7 +393,7 @@ if (state.users.includes(enteredUsername)) {
                     }
 
                     for(let i = 0; i < r.length; i++) {
-                        if (header[i].includes('nombre') && header[i+1] && header[i+1].includes('id')) {
+                        if (header[i] && header[i].includes('nombre') && header[i+1] && header[i+1].includes('id')) {
                             const name = r[i];
                             const id = r[i+1];
                             
@@ -512,37 +507,31 @@ if (state.users.includes(enteredUsername)) {
             }
         }
 
-        window.addEventListener('load', loadUsers);
-        /**
- * Envía una petición al Apps Script para registrar el usuario y la hora de acceso.
- * @param {string} user - Nombre del usuario.
- */
-async function logAccess(user) {
-    if (!CONFIG.REGISTRO_WEBAPP_URL) {
-        console.error("REGISTRO_WEBAPP_URL no está configurada.");
-        return;
-    }
-    
-    try {
-        const params = new URLSearchParams({
-            usuario: user,
-            // Agregamos la IP como 'N/A' porque el script la obtendrá o la marcará como 'N/D'
-            ip_address: 'N/A' 
-        });
+        async function logAccess(user) {
+            if (!CONFIG.REGISTRO_WEBAPP_URL) {
+                console.error("REGISTRO_WEBAPP_URL no está configurada.");
+                return;
+            }
+            
+            try {
+                const params = new URLSearchParams({
+                    usuario: user,
+                    ip_address: 'N/A' 
+                });
 
-        // Petición POST al Apps Script
-        await fetch(CONFIG.REGISTRO_WEBAPP_URL, {
-            method: 'POST',
-            mode: 'no-cors', // Necesario para evitar errores CORS en implementaciones sencillas
-            body: params
-        });
-        // Nota: No se puede verificar la respuesta debido a 'no-cors', solo asumimos el éxito.
-        console.log(`Registro de acceso para ${user} enviado exitosamente.`);
-        
-    } catch (error) {
-        console.error("Error al registrar el acceso:", error);
-    }
-}
+                await fetch(CONFIG.REGISTRO_WEBAPP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: params
+                });
+                console.log(`Registro de acceso para ${user} enviado exitosamente.`);
+                
+            } catch (error) {
+                console.error("Error al registrar el acceso:", error);
+            }
+        }
+
+        window.addEventListener('load', loadUsers);
     </script>
 </body>
 </html>
